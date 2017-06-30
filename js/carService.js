@@ -4,14 +4,20 @@ define(['./template.js', './clientStorage.js'], function(template, clientStorage
     var apiUrlCar = apiUrlPath + 'car.php?carId=';
 
     function loadMoreRequest(){
-        fetch(apiUrlLatest).then(function(response){
+        fetch(apiUrlLatest + "?carId=" + clientStorage.getLastCarId()).then(function(response){
           return response.json();
         }).then(function(data){
           clientStorage.addCars(data.cars)
           .then(function(){
-            template.appendCars(data.cars);
+            loadMore();
           });
         })
+    }
+
+    function loadMore(){
+      clientStorage.getCars().then(function(cars){
+        template.appendCars(cars);
+      });
     }
 
     function loadCarPage(carId){
