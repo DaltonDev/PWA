@@ -43,5 +43,20 @@
                 </div>
             </main>
         </div>
+        <script id="car-card" type="text/template">
+          <div class="mdl-card mdl-cell mdl-cell--4-col mdl-shadow--6dp"
+            style="background-image: url('{{image}}')">
+            <div class="mdl-card__titel">
+              <span class="mdl-card__title-text">{{title}} (${{price}})</span>
+            </div>
+          </div>
+        </script>
+        <script src="resources/es6-promise/es6-promise.js"></script>
+        <script src="resources/fetch/fetch.js"></script>
+        <script src="resources/systemjs/system.js"></script>
+
+        <script>
+          System.import('./js/app.js');
+        </script>
     </body>
 </html>
