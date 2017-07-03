@@ -114,3 +114,7 @@ function getCacheName(request){
     return carDealsCacheName;
   }
 }
+//Write console message with source id
+self.addEventListener('message', function(event){
+  event.source.postMessage({clientId:event.source.id, message:'sw'});
+})

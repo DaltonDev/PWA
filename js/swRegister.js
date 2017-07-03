@@ -42,7 +42,16 @@ define([], function(){
 //Functions to see changes to serviceworker
     navigator.serviceWorker.addEventListener('controllerchange', function(e){
       console.log('Controller changed!');
-    })
+    });
   }
 
+  navigator.serviceWorker.addEventListener('message', function(event){
+    var clientId = event.data.clientId;
+    var message = event.data.message;
+    console.log('From Client: ', clientId, message);
+  });
+
+  if(navigator.serviceWorker.controller != null){
+    navigator.serviceWorker.controller.postMessage('hello');
+  }
 });
