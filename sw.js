@@ -73,15 +73,26 @@ self.addEventListener('fetch', function(event){
     event.respondWith(fetch(event.request));
   }else if(requestPath == imagePath){
     event.respondWith(networkFirstStrategy(event.request))
+  }else{
+    event.respondWith(cacheFirstStrategy(event.request));
   }
 });
+
+//Cache first strategy
+function cacheFirstStrategy(request){
+  return caches.match(request).then(function(cacheResponse){
+    //Either get response from cache if stored of get content from network
+    return cacheResponse || fetchRequestAndCache(request);
+  });
+}
 //Function to handle offline request by checking if we have any older requests cached
+//Network first strategy
 function networkFirstStrategy(request){
   return fetchRequestAndCache(request).catch(function(response){
     return caches.match(request);
   });
 }
-
+//Network only strategy
 function fetchRequestAndCache(request){
   return fetch(request).then(function(networkResponse){
     caches.open(getCacheName(request)).then(function(cache){
