@@ -69,7 +69,37 @@ self.addEventListener('fetch', function(event){
   var requestPath = requestUrl.pathname;
   var fileName = requestPath.substring(requestPath.lastIndexOf('/') + 1);
 
-  if requestPath == latestPath || fileName == "sw.js"){
+ if(requestPath == latestPath || fileName == "sw.js"){
     event.respondWith(fetch(event.request));
+  }else if(requestPath == imagePath){
+    event.respondWith(networkFirstStrategy(event.request))
   }
 });
+//Function to handle offline request by checking if we have any older requests cached
+function networkFirstStrategy(request){
+  return fetchRequestAndCache(request).catch(function(response){
+    return caches.match(request);
+  });
+}
+
+function fetchRequestAndCache(request){
+  return fetch(request).then(function(networkResponse){
+    caches.open(getCacheName(request)).then(function(cache){
+      cache.put(request, networkResponse);
+    });
+    return networkResponse.clone();
+  });
+}
+
+function getCacheName(request){
+  var requestUrl = new URL(request.url);
+  var requestPath = requestUrl.pathname;
+//Check what to cache
+  if(requestPath == imagePath){
+    return carDealsCacheImagesName;
+  }else if(requestPath == carPath){
+    carDealsCachePagesName;
+  }else{
+    return carDealsCacheName;
+  }
+}
