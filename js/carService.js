@@ -17,6 +17,7 @@ define(['./template.js', './clientStorage.js'], function(template, clientStorage
         }).then(function(data){
           clientStorage.addCars(data.cars)
           .then(function(){
+            data.cars.forEach(preCacheDetailsPage);
               resolve("Online");
             document.getElementById("connection-status").setAttribute("Style", "color: white; background: green");
           });
@@ -44,7 +45,20 @@ define(['./template.js', './clientStorage.js'], function(template, clientStorage
             document.body.insertAdjacentHTML('beforeend', data);
         }).catch(function(){
             alert("Oops, can't retrieve page");
-        });
+        })
+    }
+
+//Cache car details 
+    function preCacheDetailsPage(car){
+      if('serviceWorker' in navigator){
+        var carDetailsUrl = apiUrlCar + car.value.details_id;
+        window.caches.open('carDealsCachePagesV1').then(function(cache){
+          cache.match(carDetailsUrl).then(function(response){
+            if(!response) cache.add(new Request(carDetailsUrl));
+          })
+        })
+
+      }
     }
 
     return {
