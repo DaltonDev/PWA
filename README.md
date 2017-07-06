@@ -1,4 +1,4 @@
-Skip the second to last commit since its breaks the loading on mobile
+Skip the "Offline support and service workers complete"-commit since its breaks the loading on mobile. 
 
 ### Car Deals Progressive Web App
 
