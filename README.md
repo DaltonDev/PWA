@@ -1,3 +1,5 @@
+Skip the second to last commit since its breaks the loading on mobile
+
 ### Car Deals Progressive Web App
 
 This project is a "Car Deals" website with the best car deals on the web! 
